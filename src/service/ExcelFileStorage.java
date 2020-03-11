@@ -23,9 +23,9 @@ import model.Blog;
 public class ExcelFileStorage {
 	
 	
-	private static String[] columns = {"Blog Title", "Blog Content", "Posted On"}; // values for the column heading inside the excel file
+	private static String[] columns = {"Blog Title", "Blog Content", "Posted On"}; 
 	
-	static List<Blog> list=new ArrayList<Blog>(); // Store the blog in the list
+	static List<Blog> list=new ArrayList<Blog>();
 	
 	public void insertBlog(Blog blog) throws IOException {
 		list.add(blog);
@@ -39,42 +39,33 @@ public class ExcelFileStorage {
 //	
 	private void createExcel(Blog blog) throws IOException {
 		System.out.println("Creating an excel");
-	      // Create a Workbook
-        Workbook workbook = new XSSFWorkbook(); // new HSSFWorkbook() for generating `.xls` file
-
-        /* CreationHelper helps us create instances of various things like DataFormat, 
-           Hyperlink, RichTextString etc, in a format (HSSF, XSSF) independent way */
+	      
+        Workbook workbook = new XSSFWorkbook(); 
+      
         CreationHelper createHelper = workbook.getCreationHelper();
 
-        // Create a Sheet
         Sheet sheet = workbook.createSheet("Blog");
 
-        // Create a Font for styling header cells
         Font headerFont = workbook.createFont();
         headerFont.setBold(true);
         headerFont.setFontHeightInPoints((short) 14);
         headerFont.setColor(IndexedColors.RED.getIndex());
-
-        // Create a CellStyle with the font
+ 
         CellStyle headerCellStyle = workbook.createCellStyle();
         headerCellStyle.setFont(headerFont);
 
-        // Create a Row
         Row headerRow = sheet.createRow(0);
 
-        // Create cells
         for(int i = 0; i < columns.length; i++) {
             Cell cell = headerRow.createCell(i);
             cell.setCellValue(columns[i]);
             cell.setCellStyle(headerCellStyle);
         }
 
-        // Create Cell Style for formatting Date
        CellStyle dateCellStyle = workbook.createCellStyle();
   
         dateCellStyle.setDataFormat(createHelper.createDataFormat().getFormat("dd-mm-yyyy"));
 
-        // Create Other rows and cells with employees data
        // int rowNum = sheet.getLastRowNum();
         int rowNum=0;
         for(Blog blogpost: list) {
@@ -92,19 +83,16 @@ public class ExcelFileStorage {
 */
         }
 
-		// Resize all columns to fit the content size
         for(int i = 0; i < columns.length; i++) {
             sheet.autoSizeColumn(i);
         }
 
-        // Write the output to a file
         FileOutputStream fileOut = new FileOutputStream("C://Users//vinot//Downloads//blog.xlsx");
         
         workbook.write(fileOut);
         
         fileOut.close();
 
-        // Closing the workbook
         workbook.close();
 		
     }
